@@ -43,23 +43,27 @@
       z-index: 20;
       display: flex;
       justify-content: center;
-      gap: 10px;
+      flex-wrap: wrap;
+      gap: 8px;
       padding: 0 12px;
     }
 
     button {
-      min-width: 132px;
+      flex: 1;
+      min-width: 100px;
+      max-width: 140px;
       min-height: 48px;
       border: 0;
       border-radius: 12px;
-      padding: 10px 14px;
-      font-size: 16px;
+      padding: 10px 8px;
+      font-size: 14px;
       font-weight: 700;
       cursor: pointer;
       touch-action: manipulation;
     }
 
     #run-button { background: #ffffff; color: #111111; }
+    #speed-button { background: #00e676; color: #111111; }
     #status-button { background: #ffd54f; color: #111111; }
 
     .hint {
@@ -99,10 +103,15 @@
       const arLabel = document.querySelector('#ar-label');
       const topPanel = document.querySelector('#top-panel');
       const runButton = document.querySelector('#run-button');
+      const speedButton = document.querySelector('#speed-button');
       const statusButton = document.querySelector('#status-button');
 
       let running = true;
       let warning = false;
+      let isSpeedUp = false;
+
+      const NORMAL_SPEED = 220;
+      const HIGH_SPEED = 660; // 220 x 3
 
       marker.addEventListener('markerFound', () => {
         topPanel.innerHTML = 'พบ Hiro Marker แล้ว — โมเดลมอเตอร์พร้อมใช้งาน<span class="hint">แตะปุ่มด้านล่างเพื่อทดลองควบคุม</span>';
@@ -116,6 +125,13 @@
         running = !running;
         shaft.setAttribute('spin-control', 'active', running);
         runButton.textContent = running ? 'หยุดมอเตอร์' : 'เริ่มมอเตอร์';
+      });
+
+      speedButton.addEventListener('click', () => {
+        isSpeedUp = !isSpeedUp;
+        const currentSpeed = isSpeedUp ? HIGH_SPEED : NORMAL_SPEED;
+        shaft.setAttribute('spin-control', 'speed', currentSpeed);
+        speedButton.textContent = isSpeedUp ? 'ความเร็วปกติ' : 'ความเร็ว x3';
       });
 
       statusButton.addEventListener('click', () => {
@@ -147,6 +163,7 @@
 
   <div id="controls">
     <button id="run-button" type="button">หยุดมอเตอร์</button>
+    <button id="speed-button" type="button">ความเร็ว x3</button>
     <button id="status-button" type="button">จำลองคำเตือน</button>
   </div>
 
